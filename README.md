@@ -14,7 +14,12 @@ To compile C code (ignore warnings):
 gcc -o ysm -O2 ysm.c
 ```
 
-To run executable:
+To run executable on Linux:
 ```
 ./ysm
+```
+
+To run executable on Windows:
+```
+.\ysm.exe
 ```
