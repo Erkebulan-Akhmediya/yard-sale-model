@@ -9,7 +9,7 @@ void random_pair(int *i, int *j, int max) {
     *j = rand() % (max+1);
 }
 
-unsigned short coin_flip() {
+unsigned char coin_flip() {
     return rand() % 2 == 1;
 }
 
