@@ -23,3 +23,6 @@ To run executable on Windows:
 ```
 .\ysm.exe
 ```
+
+#### Executable options
+- **--csv** - outputs wealth change into csv file where each row is array values after an exchange. this option is helpful for visualizations.
