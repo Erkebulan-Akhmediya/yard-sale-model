@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
+#include <string.h>
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
@@ -9,7 +11,7 @@ void random_pair(int *i, int *j, int max) {
     *j = rand() % (max+1);
 }
 
-unsigned char coin_flip() {
+bool coin_flip() {
     return rand() % 2 == 1;
 }
 
@@ -26,6 +28,13 @@ void exchange(float *arr, int arr_size) {
     }
 }
 
+void write_to_csv(FILE *file, float *arr, int arr_size) {
+    for (int i = 0; i < arr_size; i++) {
+        fprintf(file, "%.2f, ", arr[i]);
+    }
+    fprintf(file, "\n");
+}
+
 int compare(const void *a, const void *b) {
     int int_a = *(const int *)a;
     int int_b = *(const int *)b;
@@ -35,7 +44,18 @@ int compare(const void *a, const void *b) {
     return 0;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    bool csv = false;
+    FILE *file;
+    if (argc > 1 && strcmp(argv[1], "--csv") == 0) {
+        csv = true;
+        file = fopen("ysm.csv", "w");
+        if (file == NULL) {
+            perror("Error opening/creating file");
+            return 1;
+        }
+    }
 
     srand(time(NULL));
     
@@ -55,8 +75,11 @@ int main() {
     for (int i = 0; i < people_num; i++)
         arr[i] = initial_cap;
 
-    for (int i = 0; i < exchange_num; i++)
+    for (int i = 0; i < exchange_num; i++) {
         exchange(arr, people_num);
+        if (csv)
+            write_to_csv(file, arr, people_num);
+    }
 
     qsort(arr, people_num, sizeof(int), compare);
 
@@ -64,6 +87,10 @@ int main() {
         printf("%.2f\n", arr[i]);
 
     free(arr);
+
+    if (csv) {
+        fclose(file);
+    }
 
     return 0;
 }
