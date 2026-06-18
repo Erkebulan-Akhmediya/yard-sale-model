@@ -3,12 +3,13 @@
 #include <time.h>
 #include <stdbool.h>
 #include <string.h>
+#include <errno.h>
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 void random_pair(int *i, int *j, int max) {
-    *i = rand() % (max+1);
-    *j = rand() % (max+1);
+    *i = rand() % max;
+    *j = rand() % max;
 }
 
 bool coin_flip() {
@@ -29,15 +30,14 @@ void exchange(float *arr, int arr_size) {
 }
 
 void write_to_csv(FILE *file, float *arr, int arr_size) {
-    for (int i = 0; i < arr_size; i++) {
+    for (int i = 0; i < arr_size; i++)
         fprintf(file, "%.2f, ", arr[i]);
-    }
     fprintf(file, "\n");
 }
 
 int compare(const void *a, const void *b) {
-    int int_a = *(const int *)a;
-    int int_b = *(const int *)b;
+    int int_a = *(const float *)a;
+    int int_b = *(const float *)b;
     
     if (int_a < int_b) return 1;
     if (int_a > int_b) return -1;
@@ -77,8 +77,10 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < exchange_num; i++) {
         exchange(arr, people_num);
-        if (csv)
+        if (csv) {
+            qsort(arr, people_num, sizeof(float), compare);
             write_to_csv(file, arr, people_num);
+        }
     }
 
     qsort(arr, people_num, sizeof(int), compare);
@@ -88,9 +90,8 @@ int main(int argc, char *argv[]) {
 
     free(arr);
 
-    if (csv) {
-        fclose(file);
-    }
+    if (csv && fclose(file) != 0) 
+        printf("failed to close the file: %d\n", errno);
 
     return 0;
 }
