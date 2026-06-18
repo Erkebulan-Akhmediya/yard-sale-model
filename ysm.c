@@ -36,8 +36,8 @@ void write_to_csv(FILE *file, float *arr, int arr_size) {
 }
 
 int compare(const void *a, const void *b) {
-    int int_a = *(const float *)a;
-    int int_b = *(const float *)b;
+    float int_a = *(const float *)a;
+    float int_b = *(const float *)b;
     
     if (int_a < int_b) return 1;
     if (int_a > int_b) return -1;
