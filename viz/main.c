@@ -14,8 +14,10 @@
 
 int main(int argc, char *argv[]) {
 
-    if (argc != 3 || argv[1] != "-f")
+    if (argc != 3 || argv[1] != "-f") {
         perror("invalid arguments");
+        return 1;
+    }
 
     CSV *csv = csv_open(argv[2]);
     if (csv == NULL) {
