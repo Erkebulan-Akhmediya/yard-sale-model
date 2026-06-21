@@ -3,6 +3,8 @@
 
 DStr *new_dstr() {
     DStr *str = malloc(sizeof(DStr));
+    if (str == NULL)
+        return NULL;
     str->buff = calloc(64, sizeof(char));
     str->next_free_index = 0;
     return str;
