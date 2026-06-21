@@ -88,6 +88,9 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    if (csv)
+        write_to_csv(file, arr, people_num);
+
     for (int i = 0; i < exchange_num; i++) {
         exchange(arr, people_num);
         if (csv) {
