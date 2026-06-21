@@ -3,7 +3,7 @@
 
 typedef struct {
     char *buff;
-    int next_free_index;
+    char next_free_index;
 } DStr;
 
 DStr *new_dstr();
