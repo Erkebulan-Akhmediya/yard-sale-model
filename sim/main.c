@@ -75,14 +75,25 @@ int main(int argc, char *argv[]) {
     scanf("%d", &initial_cap);
 
     float *arr = calloc(people_num, sizeof(float));
+    if (arr == NULL) {
+        perror("failed to allocate arr");
+        return 1;
+    }
     for (int i = 0; i < people_num; i++)
         arr[i] = initial_cap;
+    
+    float *sorted_arr = calloc(people_num, sizeof(float));
+    if (sorted_arr == NULL) {
+        perror("failed to allocate sorted_arr");
+        return 1;
+    }
 
     for (int i = 0; i < exchange_num; i++) {
         exchange(arr, people_num);
         if (csv) {
-            qsort(arr, people_num, sizeof(float), compare);
-            write_to_csv(file, arr, people_num);
+            memcpy(sorted_arr, arr, sizeof(float) * people_num);
+            qsort(sorted_arr, people_num, sizeof(float), compare);
+            write_to_csv(file, sorted_arr, people_num);
         }
     }
 
@@ -92,6 +103,7 @@ int main(int argc, char *argv[]) {
         printf("%.2f\n", arr[i]);
 
     free(arr);
+    free(sorted_arr);
 
     if (csv && fclose(file) != 0) 
         printf("failed to close the file: %d\n", errno);
