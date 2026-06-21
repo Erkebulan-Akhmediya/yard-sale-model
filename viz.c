@@ -1,5 +1,7 @@
 #include "raylib.h"
+#include "dstr.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 #define WIN_wIDTH 700
 #define WIN_HEIGHT 500
@@ -8,7 +10,51 @@
 #define AXIS_WIDTH 3
 #define AXIS_PADDING 50
 
+int count_data(float *max, int *row_count, int *col_count) {
+    FILE *f = fopen("ysm.csv", "r");
+    if (f == NULL)
+        return -1;
+
+    int ch;
+    DStr *num_dstr = new_dstr();
+    int count = 0;
+    *row_count = 0;
+    *col_count = 0;
+    *max = 0.0;
+    while ((ch = fgetc(f)) != EOF) {
+        if (ch != ',' && ch != '\n') {
+            dstr_append(num_dstr, ch);
+            continue;
+        }
+
+        count++;
+        char *num_str = dstr_to_str(num_dstr);
+        float num = (float) atof(num_str);
+        dstr_clear(num_dstr);
+
+        if (ch == '\n')
+            (*row_count)++;
+        
+        if (num > *max)
+            *max = num;
+    }
+
+    *col_count = count / *row_count;
+
+    dstr_free(num_dstr);
+    fclose(f);
+    return 0;
+}
+
 int main() {
+
+    float max;
+    int row_count, col_count;
+    if (count_data(&max, &row_count, &col_count) == -1) {
+        perror("failed to count data");
+        return -1;
+    }
+    printf("max: %f\nrow count: %d\ncol count: %d\n", max, row_count, col_count);
 
     InitWindow(WIN_wIDTH, WIN_HEIGHT, WIN_TITLE);
 

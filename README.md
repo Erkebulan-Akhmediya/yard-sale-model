@@ -29,5 +29,5 @@ To run executable on Windows:
 
 To compile on Windows:
 ```
-gcc viz.c -o viz -I C:\raylib\w64devkit\include -L C:\raylib\w64devkit\lib -lraylib -lopengl32 -lgdi32 -lwinmm
+gcc viz.c dstr.c dstr.h -o viz -I C:\raylib\w64devkit\include -L C:\raylib\w64devkit\lib -lraylib -lopengl32 -lgdi32 -lwinmm
 ```
