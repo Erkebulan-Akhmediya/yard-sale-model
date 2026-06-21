@@ -2,6 +2,7 @@
 #include "dstr.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define WIN_wIDTH 700
 #define WIN_HEIGHT 500
@@ -10,8 +11,8 @@
 #define AXIS_WIDTH 3
 #define AXIS_PADDING 50
 
-int count_data(float *max, int *row_count, int *col_count) {
-    FILE *f = fopen("ysm.csv", "r");
+int count_data(char *csv_file_name, float *max, int *row_count, int *col_count) {
+    FILE *f = fopen(csv_file_name, "r");
     if (f == NULL)
         return -1;
 
@@ -60,8 +61,8 @@ void skip_lines(FILE *f, int nlines) {
     }
 }
 
-float *read_line(int row_index, int row_len) {
-    FILE *f = fopen("ysm.csv", "r");
+float *read_line(char *csv_file_name, int row_index, int row_len) {
+    FILE *f = fopen(csv_file_name, "r");
     if (f == NULL)
         return NULL;
     
@@ -88,11 +89,14 @@ float *read_line(int row_index, int row_len) {
     return line;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    if (argc != 3 || argv[1] != "-f")
+        perror("invalid arguments");
 
     float max;
     int row_count, col_count;
-    if (count_data(&max, &row_count, &col_count) == -1) {
+    if (count_data(argv[2], &max, &row_count, &col_count) == -1) {
         perror("failed to count data");
         return -1;
     }
@@ -101,7 +105,7 @@ int main() {
     // read and print first 3 rows (for testing)
     for (int row_index = 0; row_index < 3; row_index++) {
         printf("row %d: ", row_index);
-        float *line = read_line(row_index, col_count);
+        float *line = read_line(argv[2], row_index, col_count);
         if (line == NULL) {
             perror("failed to read a line");
             continue;

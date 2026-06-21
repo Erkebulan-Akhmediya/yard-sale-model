@@ -51,9 +51,9 @@ int main(int argc, char *argv[]) {
 
     bool csv = false;
     FILE *file;
-    if (argc > 1 && strcmp(argv[1], "--csv") == 0) {
+    if (argc == 3 && strcmp(argv[1], "--export") == 0) {
         csv = true;
-        file = fopen("ysm.csv", "w");
+        file = fopen(argv[2], "w");
         if (file == NULL) {
             perror("Error opening/creating file");
             return 1;

@@ -1,8 +1,4 @@
-ysm
-ysm.exe
-ysm.csv
-
-viz
-viz.exe
+*.csv
+*.exe
 
 .vscode
