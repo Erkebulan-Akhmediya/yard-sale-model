@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define WIN_WIDTH 700
-#define WIN_HEIGHT 500
+#define WIN_WIDTH 1200
+#define WIN_HEIGHT 900
 #define WIN_TITLE "Yard Sale Model"
 
 #define AXIS_WIDTH 3
@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    int row_index = 0;
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(WHITE);
@@ -58,7 +59,22 @@ int main(int argc, char *argv[]) {
         int init_col_x = AXIS_PADDING + AXIS_WIDTH;
         int init_col_y = WIN_HEIGHT - AXIS_PADDING - AXIS_WIDTH;
 
-        float *line = csv_get_line(csv, 0);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            if (row_index < csv->row_count-1)
+                row_index++;
+            else
+                row_index = 0;
+        else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) 
+            if (row_index > 0)
+                row_index--;
+            else
+                row_index = csv->row_count-1;
+        
+        char iteration[64];
+        sprintf(iteration, "%d/%d", row_index, csv->row_count-1);
+        DrawText(iteration, WIN_WIDTH-100, 100, 14, BLACK);
+
+        float *line = csv_get_line(csv, row_index);
         if (line == NULL) {
             EndDrawing();
             break;
