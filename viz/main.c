@@ -59,12 +59,12 @@ int main(int argc, char *argv[]) {
         int init_col_x = AXIS_PADDING + AXIS_WIDTH;
         int init_col_y = WIN_HEIGHT - AXIS_PADDING - AXIS_WIDTH;
 
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        if (GetMouseWheelMove() < 0)
             if (row_index < csv->row_count-1)
                 row_index++;
             else
                 row_index = 0;
-        else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) 
+        else if (GetMouseWheelMove() > 0) 
             if (row_index > 0)
                 row_index--;
             else
