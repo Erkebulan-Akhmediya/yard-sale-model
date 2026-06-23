@@ -17,9 +17,9 @@ gcc -o sim -O2 sim/main.c
 
 #### Visualization
 
-To compile on Windows:
+To compile:
 ```
-gcc viz/main.c viz/dstr.c viz/dstr.h viz/csv.c viz/csv.h -o viz -I C:\raylib\w64devkit\include -L C:\raylib\w64devkit\lib -lraylib -lopengl32 -lgdi32 -lwinmm -O2
+make
 ```
 
 #### Visualization Options
