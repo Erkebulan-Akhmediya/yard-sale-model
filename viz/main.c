@@ -1,7 +1,6 @@
 #include "raylib.h"
 #include "dstr.h"
 #include "csv.h"
-#include "bst.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,10 +22,6 @@ void draw_col(int x, int y, int width, int height) {
 }
 
 int main(int argc, char *argv[]) {
-
-    BST bst;
-    bst_init(&bst);
-    bst_insert(&bst, 12.0);
 
     if (argc != 3 || strcmp(argv[1], "-f") != 0) {
         perror("invalid arguments");

@@ -13,6 +13,6 @@ viz/%.o: viz/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	del /Q viz\*.o $(TARGET)
+	del /Q viz\*.o
 
 .PHONY: clean
