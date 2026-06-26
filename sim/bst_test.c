@@ -10,6 +10,7 @@ int main() {
     bst_insert(&bst, 67.0);
     bst_insert(&bst, 15.0);
     bst_delete(&bst, 67.0);
+    bst_delete(&bst, 10.0);
     float *arr = bst_to_arr(&bst);
 
     printf("bst.size = %d\n", bst.size);

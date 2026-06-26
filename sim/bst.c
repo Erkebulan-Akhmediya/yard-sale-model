@@ -56,23 +56,58 @@ int bst_insert(BST *bst, float val) {
 int _bst_delete(struct BSTNode *node, float val) {
     if (node == NULL)
         return -1;
+
     if (node->val == val) {
+        if (node->left == NULL && node->right == NULL) {
+            free(node);
+            node = NULL;
+            return 1;
+        }
+
+        struct BSTNode *node_to_delete;
+        float val_to_delete;
+
         if (node->right != NULL) {
             node->val = node->right->val;
-            return _bst_delete(node->right, node->right->val);
+            int res = _bst_delete(node->right, node->right->val);
+            if (res == 1) {
+                node->right = NULL;
+                return 0;
+            }
+            return res;
         }
         if (node->left != NULL) {
             node->val = node->left->val;
-            return _bst_delete(node->left, node->left->val);
+            int res = _bst_delete(node->left, node->left->val);
+            if (res == 1) {
+                node->left = NULL;
+                return 0;
+            }
+            return res;
         }
-        free(node);
-        node = NULL;
-        return 0;
+
+        int res = _bst_delete(node_to_delete, val_to_delete);
+        if (res == 1) {
+            node_to_delete = NULL;
+            return 0;
+        }
+        return res;
     }
-    if (val > node->val)
-        return _bst_delete(node->left, val);
-    else
-        return _bst_delete(node->right, val);
+    if (val > node->val) {
+        int res = _bst_delete(node->left, val);
+        if (res == 1) {
+            node->left = NULL;
+            return 0;
+        }
+        return res;
+    } else {
+        int res = _bst_delete(node->right, val);
+        if (res == 0) {
+            node->right = NULL;
+            return 0;
+        }
+        return res;
+    }
 }
 
 int bst_delete(BST *bst, float val) {
