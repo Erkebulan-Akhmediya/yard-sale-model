@@ -53,7 +53,37 @@ int bst_insert(BST *bst, float val) {
     return 0;
 }
 
-int bst_delete(BST *bst, float val) {}
+int _bst_delete(struct BSTNode *node, float val) {
+    if (node == NULL)
+        return -1;
+    if (node->val == val) {
+        if (node->right != NULL) {
+            node->val = node->right->val;
+            return _bst_delete(node->right, node->right->val);
+        }
+        if (node->left != NULL) {
+            node->val = node->left->val;
+            return _bst_delete(node->left, node->left->val);
+        }
+        free(node);
+        node = NULL;
+        return 0;
+    }
+    if (val > node->val)
+        return _bst_delete(node->left, val);
+    else
+        return _bst_delete(node->right, val);
+}
+
+int bst_delete(BST *bst, float val) {
+    if (bst->root == NULL)
+        return -1;
+    
+    if (_bst_delete(bst->root, val) == -1)
+        return -1;
+    bst->size--;
+    return 0;
+}
 
 void _bst_to_arr(Stack *stack, struct BSTNode *node) {
     if (node->left != NULL)

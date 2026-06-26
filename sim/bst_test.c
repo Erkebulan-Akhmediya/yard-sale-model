@@ -7,7 +7,9 @@ int main() {
     bst_init(&bst);
     bst_insert(&bst, 12.0);
     bst_insert(&bst, 10.0);
+    bst_insert(&bst, 67.0);
     bst_insert(&bst, 15.0);
+    bst_delete(&bst, 67.0);
     float *arr = bst_to_arr(&bst);
 
     printf("bst.size = %d\n", bst.size);
