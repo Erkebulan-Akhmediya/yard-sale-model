@@ -1,6 +1,12 @@
 #ifndef BST_H
 #define BST_H
 
+struct BSTNode {
+    float val;
+    struct BSTNode *left;
+    struct BSTNode *right;
+};
+
 typedef struct {
     struct BSTNode *root;
     int size;

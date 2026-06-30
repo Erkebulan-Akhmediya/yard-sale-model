@@ -1,12 +1,7 @@
 #include "bst.h"
 #include "stack.h"
 #include <stdlib.h>
-
-struct BSTNode {
-    float val;
-    struct BSTNode *left;
-    struct BSTNode *right;
-};
+#include <stdio.h>
 
 void bst_init(BST *bst) {
     bst->root = NULL;
@@ -45,11 +40,13 @@ int bst_insert(BST *bst, float val) {
         bst->root->left = NULL;
         bst->root->right = NULL;
         bst->size++;
+        printf("inserted %.2f\n", val);
         return 0;
     }
     if (_bst_insert(bst->root, val) == -1)
         return -1;
     bst->size++;
+    printf("inserted %.2f\n", val);
     return 0;
 }
 
@@ -60,12 +57,8 @@ int _bst_delete(struct BSTNode *node, float val) {
     if (node->val == val) {
         if (node->left == NULL && node->right == NULL) {
             free(node);
-            node = NULL;
             return 1;
         }
-
-        struct BSTNode *node_to_delete;
-        float val_to_delete;
 
         if (node->right != NULL) {
             node->val = node->right->val;
@@ -76,6 +69,7 @@ int _bst_delete(struct BSTNode *node, float val) {
             }
             return res;
         }
+        
         if (node->left != NULL) {
             node->val = node->left->val;
             int res = _bst_delete(node->left, node->left->val);
@@ -85,13 +79,6 @@ int _bst_delete(struct BSTNode *node, float val) {
             }
             return res;
         }
-
-        int res = _bst_delete(node_to_delete, val_to_delete);
-        if (res == 1) {
-            node_to_delete = NULL;
-            return 0;
-        }
-        return res;
     }
     if (val > node->val) {
         int res = _bst_delete(node->left, val);
@@ -114,9 +101,13 @@ int bst_delete(BST *bst, float val) {
     if (bst->root == NULL)
         return -1;
     
-    if (_bst_delete(bst->root, val) == -1)
+    int res = _bst_delete(bst->root, val);
+    if (res == -1)
         return -1;
+    if (res == 1)
+        bst->root = NULL;
     bst->size--;
+    printf("deleted %.2f\n", val);
     return 0;
 }
 
