@@ -10,75 +10,87 @@ void print_arr(float *arr, int size) {
     printf("\n");
 }
 
-int main() {
+void insert_and_print_arr(BST *bst, float val) {
+    bst_insert(bst, val);
+    float *arr = bst_to_arr(bst);
+    print_arr(arr, bst->size);
+    free(arr);
+}
+
+void delete_and_print_arr(BST *bst, float val) {
+    bst_delete(bst, val);
+    float *arr = bst_to_arr(bst);
+    print_arr(arr, bst->size);
+    free(arr);
+}
+
+void delete_root() {
+    printf("---------------------\n");
+    printf("delete root test\n");
     BST bst;
     bst_init(&bst);
 
-    bst_insert(&bst, 12.0);
+    insert_and_print_arr(&bst, 67.0);
 
-    float *arr = bst_to_arr(&bst);
-    print_arr(arr, bst.size);
-    free(arr);
+    delete_and_print_arr(&bst, 67.0);
 
-    bst_insert(&bst, 10.0);
+    bst_free(&bst);
+    printf("---------------------\n");
+}
 
-    arr = bst_to_arr(&bst);
-    print_arr(arr, bst.size);
-    free(arr);
+void delete_leaf() {
+    printf("---------------------\n");
+    printf("delete left test\n");
+    BST bst;
+    bst_init(&bst);
 
-    bst_insert(&bst, 67.0);
+    insert_and_print_arr(&bst, 67.0);
 
-    arr = bst_to_arr(&bst);
-    print_arr(arr, bst.size);
-    free(arr);
+    insert_and_print_arr(&bst, 69.0);
 
-    bst_insert(&bst, 15.0);
+    delete_and_print_arr(&bst, 69.0);
 
-    arr = bst_to_arr(&bst);
-    print_arr(arr, bst.size);
-    free(arr);
+    bst_free(&bst);
+    printf("---------------------\n");
+}
 
-    bst_delete(&bst, 67.0);
+void delete_node_with_both_children() {
+    printf("---------------------\n");
+    printf("delete node with both children\n");
+    BST bst;
+    bst_init(&bst);
 
-    arr = bst_to_arr(&bst);
-    print_arr(arr, bst.size);
-    free(arr);
+    insert_and_print_arr(&bst, 42.0);
+    insert_and_print_arr(&bst, 67.0);
+    insert_and_print_arr(&bst, 52.0);
+    insert_and_print_arr(&bst, 69.0);
+    delete_and_print_arr(&bst, 67.0);
 
-    bst_delete(&bst, 10.0);
+    bst_free(&bst);
+    printf("---------------------\n");
+}
 
-    arr = bst_to_arr(&bst);
-    print_arr(arr, bst.size);
-    free(arr);
+void delete_node_with_left_child() {
+    printf("---------------------\n");
+    printf("delete node with left child\n");
+    BST bst;
+    bst_init(&bst);
 
-    bst_insert(&bst, 12.0);
+    insert_and_print_arr(&bst, 52.0);
+    insert_and_print_arr(&bst, 67.0);
+    insert_and_print_arr(&bst, 69.0);
+    delete_and_print_arr(&bst, 67.0);
 
-    arr = bst_to_arr(&bst);
-    print_arr(arr, bst.size);
-    free(arr);
+    bst_free(&bst);
+    printf("---------------------\n");
+}
 
-    bst_insert(&bst, 13.0);
+void delete_node_with_right_child() {}
 
-    arr = bst_to_arr(&bst);
-    print_arr(arr, bst.size);
-    free(arr);
-
-    bst_delete(&bst, 15.0);
-
-    arr = bst_to_arr(&bst);
-    print_arr(arr, bst.size);
-    free(arr);
-
-    bst_delete(&bst, 12.0);
-
-    arr = bst_to_arr(&bst);
-    print_arr(arr, bst.size);
-    free(arr);
-
-    bst_delete(&bst, 13.0);
-
-    arr = bst_to_arr(&bst);
-    print_arr(arr, bst.size);
-    free(arr);
-
+int main() {
+    delete_root();
+    delete_leaf();
+    delete_node_with_both_children();
+    delete_node_with_left_child();
     return 0;
 }

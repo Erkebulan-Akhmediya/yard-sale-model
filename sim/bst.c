@@ -132,3 +132,18 @@ float *bst_to_arr(BST *bst) {
     _bst_to_arr(&stack, bst->root);
     return stack.arr;
 }
+
+void _bst_free(struct BSTNode *node) {
+    if (node == NULL)
+        return;
+
+    _bst_free(node->left);
+    _bst_free(node->right);
+    free(node);
+}
+
+void bst_free(BST *bst) {
+    _bst_free(bst->root);
+    bst->root = NULL;
+    bst->size = 0;
+}

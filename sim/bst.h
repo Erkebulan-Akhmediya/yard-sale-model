@@ -15,6 +15,7 @@ typedef struct {
 void bst_init(BST *);
 int bst_insert(BST *, float);
 int bst_delete(BST *, float);
+void bst_free(BST *);
 float *bst_to_arr(BST *);
 
 #endif
