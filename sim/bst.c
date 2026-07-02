@@ -55,24 +55,22 @@ int _bst_delete(struct BSTNode *node, float val) {
     if (node == NULL)
         return -1;
 
+    struct BSTNode **node_to_delete;
+    float val_to_delete;
     if (node->val == val) {
         if (node->left == NULL && node->right == NULL) {
             free(node);
             return 1;
         }
 
-        struct BSTNode **node_to_delete = node->right != NULL ? &(node->right) : &(node->left);
-        node->val = (*node_to_delete)->val;
-        int res = _bst_delete(*node_to_delete, (*node_to_delete)->val);
-        if (res == 1) {
-            *node_to_delete = NULL;
-            return 0;
-        }
-        return res;
+        node_to_delete = node->right != NULL ? &(node->right) : &(node->left);
+        val_to_delete = (*node_to_delete)->val;
+    } else {
+        node_to_delete = node->val > val ? &(node->right) : &(node->left);
+        val_to_delete = val;
     }
 
-    struct BSTNode **node_to_delete = val > node->val ? &(node->left) : &(node->right);
-    int res = _bst_delete(*node_to_delete, val);
+    int res = _bst_delete(*node_to_delete, val_to_delete);
     if (res == 1) {
         *node_to_delete = NULL;
         return 0;
