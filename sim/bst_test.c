@@ -98,6 +98,7 @@ int main() {
     delete_root();
     delete_leaf();
     delete_node_with_both_children();
+    delete_node_with_right_child();
     delete_node_with_left_child();
     return 0;
 }
