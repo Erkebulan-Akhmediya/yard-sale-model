@@ -8,37 +8,38 @@ void bst_init(BST *bst) {
     bst->size = 0;
 }
 
+struct BSTNode *_new_bst_node(float val) {
+    struct BSTNode *node = malloc(sizeof(struct BSTNode));
+    if (node == NULL)
+        return NULL;
+    node->val = val;
+    node->left = NULL;
+    node->right = NULL;
+    return node;
+}
+
 int _bst_insert(struct BSTNode *node, float val) {
     if (val > node->val) {
         if (node->left != NULL)
             return _bst_insert(node->left, val);
-        node->left = malloc(sizeof(struct BSTNode));
+        node->left = _new_bst_node(val);
         if (node->left == NULL)
             return -1;
-        node->left->val = val;
-        node->left->left = NULL;
-        node->left->right = NULL;
     } else {
         if (node->right != NULL)
             return _bst_insert(node->right, val);
-        node->right = malloc(sizeof(struct BSTNode));
+        node->right = _new_bst_node(val);
         if (node->right == NULL)
             return -1;
-        node->right->val = val;
-        node->right->left = NULL;
-        node->right->right = NULL;
     }
     return 0;
 }
 
 int bst_insert(BST *bst, float val) {
     if (bst->root == NULL) {
-        bst->root = malloc(sizeof(struct BSTNode));
+        bst->root = _new_bst_node(val);
         if (bst->root == NULL)
             return -1;
-        bst->root->val = val;
-        bst->root->left = NULL;
-        bst->root->right = NULL;
         bst->size++;
         printf("inserted %.2f\n", val);
         return 0;
