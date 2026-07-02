@@ -70,21 +70,14 @@ int _bst_delete(struct BSTNode *node, float val) {
         }
         return res;
     }
-    if (val > node->val) {
-        int res = _bst_delete(node->left, val);
-        if (res == 1) {
-            node->left = NULL;
-            return 0;
-        }
-        return res;
-    } else {
-        int res = _bst_delete(node->right, val);
-        if (res == 0) {
-            node->right = NULL;
-            return 0;
-        }
-        return res;
+
+    struct BSTNode **node_to_delete = val > node->val ? &(node->left) : &(node->right);
+    int res = _bst_delete(*node_to_delete, val);
+    if (res == 1) {
+        *node_to_delete = NULL;
+        return 0;
     }
+    return res;
 }
 
 int bst_delete(BST *bst, float val) {
