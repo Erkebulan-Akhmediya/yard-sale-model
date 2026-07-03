@@ -10,6 +10,16 @@ typedef struct {
     float added[2];
 } ExchangeResult;
 
+void print_arr(float *arr, int size) {
+    printf("[");
+    for (int i = 2; i < size; i++) {
+        printf("%.2f", arr[i]);
+        if (i < size-1)
+            printf(", ");
+    }
+    printf("]\n");
+}
+
 void random_pair(int *i, int *j, int max) {
     *i = rand() % max;
     *j = rand() % max;
@@ -41,6 +51,7 @@ int exchange(float *arr, BST *bst) {
     if (!csv)
         return 0;
 
+    float *pre_arr = bst_to_arr(bst);
     if (bst_delete(bst, res.removed[0]) == -1) {
         fprintf(stderr, "failed to delete %.2f from the BST\n", res.removed[0]);
         fprintf(
@@ -51,6 +62,11 @@ int exchange(float *arr, BST *bst) {
             res.added[0], 
             res.added[1]
         );
+        if (pre_arr != NULL) {
+            printf("BST before exchange: ");
+            print_arr(pre_arr, bst->size);
+            free(pre_arr);
+        }
         return -1;
     }
     if (bst_delete(bst, res.removed[1]) == -1) {
@@ -63,6 +79,11 @@ int exchange(float *arr, BST *bst) {
             res.added[0], 
             res.added[1]
         );
+        if (pre_arr != NULL) {
+            printf("BST before exchange: ");
+            print_arr(pre_arr, bst->size);
+            free(pre_arr);
+        }
         return -1;
     }
     if (bst_insert(bst, res.added[0]) == -1) {
@@ -75,6 +96,11 @@ int exchange(float *arr, BST *bst) {
             res.added[0], 
             res.added[1]
         );
+        if (pre_arr != NULL) {
+            printf("BST before exchange: ");
+            print_arr(pre_arr, bst->size);
+            free(pre_arr);
+        }
         return -1;
     }
     if (bst_insert(bst, res.added[1]) == -1) {
@@ -87,6 +113,11 @@ int exchange(float *arr, BST *bst) {
             res.added[0], 
             res.added[1]
         );
+        if (pre_arr != NULL) {
+            printf("BST before exchange: ");
+            print_arr(pre_arr, bst->size);
+            free(pre_arr);
+        }
         return -1;
     }
 
