@@ -4,22 +4,35 @@
 #include <stdbool.h>
 #include <string.h>
 #include <errno.h>
+#include "bst.h"
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+typedef struct {
+    float removed[2];
+    float added[2];
+} ExchangeResult;
+
+bool csv = false;
 
 void random_pair(int *i, int *j, int max) {
     *i = rand() % max;
     *j = rand() % max;
+    if (*i == *j)
+        random_pair(i, j, max);
 }
 
 bool coin_flip() {
     return rand() % 2 == 1;
 }
 
-void exchange(float *arr, int arr_size) {
+int exchange(float *arr, BST *bst) {
     int i, j;
-    random_pair(&i, &j, arr_size);
+    random_pair(&i, &j, bst->size);
     float amount = MIN(arr[i], arr[j]) * 0.1;
+    ExchangeResult res;
+    res.removed[0] = arr[i];
+    res.removed[1] = arr[j];
     if (coin_flip()) {
         arr[i] += amount;
         arr[j] -= amount;
@@ -27,6 +40,62 @@ void exchange(float *arr, int arr_size) {
         arr[j] += amount;
         arr[i] -= amount;
     }
+    res.added[0] = arr[i];
+    res.added[1] = arr[j];
+    
+    if (!csv)
+        return 0;
+
+    if (bst_delete(bst, res.removed[0]) == -1) {
+        fprintf(stderr, "failed to delete %.2f from the BST\n", res.removed[0]);
+        fprintf(
+            stderr, 
+            "exchange result: removed: [%.2f, %.2f], added: [%.2f, %.2f]\n", 
+            res.removed[0], 
+            res.removed[1], 
+            res.added[0], 
+            res.added[1]
+        );
+        return -1;
+    }
+    if (bst_delete(bst, res.removed[1]) == -1) {
+        fprintf(stderr, "failed to delete %.2f from the BST\n", res.removed[0]);
+        fprintf(
+            stderr, 
+            "exchange result: removed: [%.2f, %.2f], added: [%.2f, %.2f]\n", 
+            res.removed[0], 
+            res.removed[1], 
+            res.added[0], 
+            res.added[1]
+        );
+        return -1;
+    }
+    if (bst_insert(bst, res.added[0]) == -1) {
+        fprintf(stderr, "failed to delete %.2f from the BST\n", res.removed[0]);
+        fprintf(
+            stderr, 
+            "exchange result: removed: [%.2f, %.2f], added: [%.2f, %.2f]\n", 
+            res.removed[0], 
+            res.removed[1], 
+            res.added[0], 
+            res.added[1]
+        );
+        return -1;
+    }
+    if (bst_insert(bst, res.added[1]) == -1) {
+        fprintf(stderr, "failed to delete %.2f from the BST\n", res.removed[0]);
+        fprintf(
+            stderr, 
+            "exchange result: removed: [%.2f, %.2f], added: [%.2f, %.2f]\n", 
+            res.removed[0], 
+            res.removed[1], 
+            res.added[0], 
+            res.added[1]
+        );
+        return -1;
+    }
+
+    return 0;
 }
 
 void write_to_csv(FILE *file, float *arr, int arr_size) {
@@ -49,7 +118,7 @@ int compare(const void *a, const void *b) {
 
 int main(int argc, char *argv[]) {
 
-    bool csv = false;
+    csv = false;
     FILE *file;
     if (argc == 3 && strcmp(argv[1], "--export") == 0) {
         csv = true;
@@ -76,15 +145,19 @@ int main(int argc, char *argv[]) {
 
     float *arr = calloc(people_num, sizeof(float));
     if (arr == NULL) {
-        perror("failed to allocate arr");
+        perror("failed to allocate arr\n");
         return 1;
     }
     for (int i = 0; i < people_num; i++)
         arr[i] = initial_cap;
     
-    float *sorted_arr = calloc(people_num, sizeof(float));
-    if (sorted_arr == NULL) {
-        perror("failed to allocate sorted_arr");
+    BST bst;
+    if (bst_init_with_arr(&bst, arr, people_num) == -1) {
+        fprintf(stderr, "failed to init the BST\n");
+        return 1;
+    }
+    if (bst.size != people_num) {
+        fprintf(stderr, "the BST did not initialize properly\n");
         return 1;
     }
 
@@ -92,11 +165,18 @@ int main(int argc, char *argv[]) {
         write_to_csv(file, arr, people_num);
 
     for (int i = 0; i < exchange_num; i++) {
-        exchange(arr, people_num);
+        if (exchange(arr, &bst) == -1) {
+            fprintf(stderr, "exchange failed\n");
+            return 1;
+        }
         if (csv) {
-            memcpy(sorted_arr, arr, sizeof(float) * people_num);
-            qsort(sorted_arr, people_num, sizeof(float), compare);
+            float *sorted_arr = bst_to_arr(&bst);
+            if (sorted_arr == NULL) {
+                fprintf(stderr, "failed to turn the BST into an array\n");
+                return 1;
+            }
             write_to_csv(file, sorted_arr, people_num);
+            free(sorted_arr);
         }
     }
 
@@ -106,10 +186,9 @@ int main(int argc, char *argv[]) {
         printf("%.2f\n", arr[i]);
 
     free(arr);
-    free(sorted_arr);
 
     if (csv && fclose(file) != 0) 
-        printf("failed to close the file: %d\n", errno);
+        fprintf(stderr, "failed to close the file: %d\n", errno);
 
     return 0;
 }

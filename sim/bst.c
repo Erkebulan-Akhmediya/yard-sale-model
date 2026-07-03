@@ -41,13 +41,19 @@ int bst_insert(BST *bst, float val) {
         if (bst->root == NULL)
             return -1;
         bst->size++;
-        printf("inserted %.2f\n", val);
         return 0;
     }
     if (_bst_insert(bst->root, val) == -1)
         return -1;
     bst->size++;
-    printf("inserted %.2f\n", val);
+    return 0;
+}
+
+int bst_init_with_arr(BST *bst, float *arr, int arr_size) {
+    bst_init(bst);
+    for (int i = 0; i < arr_size; i++)
+        if (bst_insert(bst, arr[i]) == -1)
+            return -1;
     return 0;
 }
 
@@ -88,7 +94,6 @@ int bst_delete(BST *bst, float val) {
     if (res == 1)
         bst->root = NULL;
     bst->size--;
-    printf("deleted %.2f\n", val);
     return 0;
 }
 
@@ -112,6 +117,22 @@ float *bst_to_arr(BST *bst) {
 
     _bst_to_arr(&stack, bst->root);
     return stack.arr;
+}
+
+int bst_print_arr(BST *bst) {
+    float *arr = bst_to_arr(bst);
+    if (arr == NULL)
+        return -1;
+
+    printf("BST: [");
+    for (int i = 0; i < bst->size; i++) {
+        printf("%.2f", arr[i]);
+        if (i < bst->size-1)
+            printf(", ");
+    }
+    printf("]\n");
+    free(arr);
+    return 0;
 }
 
 void _bst_free(struct BSTNode *node) {
