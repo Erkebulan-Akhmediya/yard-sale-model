@@ -5,6 +5,8 @@
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
+int iteration = 0;
+
 typedef struct {
     float removed[2];
     float added[2];
@@ -31,6 +33,22 @@ bool coin_flip() {
     return rand() % 2 == 1;
 }
 
+void log_err(ExchangeResult res, float *log_arr, int log_arr_size) {
+    fprintf(
+        stderr, 
+        "values to be removed: [%.2f, %.2f], values to be added: [%.2f, %.2f]\n", 
+        res.removed[0], 
+        res.removed[1], 
+        res.added[0], 
+        res.added[1]
+    );
+    if (log_arr != NULL) {
+        printf("BST before operation: ");
+        print_arr(log_arr, log_arr_size);
+        free(log_arr);
+    }
+}
+
 int exchange(float *arr, BST *bst) {
     int i, j;
     random_pair(&i, &j, bst->size);
@@ -51,75 +69,34 @@ int exchange(float *arr, BST *bst) {
     if (!csv)
         return 0;
 
-    float *pre_arr = bst_to_arr(bst);
+    float *log_arr = bst_to_arr(bst);
     if (bst_delete(bst, res.removed[0]) == -1) {
-        fprintf(stderr, "failed to delete %.2f from the BST\n", res.removed[0]);
-        fprintf(
-            stderr, 
-            "exchange result: removed: [%.2f, %.2f], added: [%.2f, %.2f]\n", 
-            res.removed[0], 
-            res.removed[1], 
-            res.added[0], 
-            res.added[1]
-        );
-        if (pre_arr != NULL) {
-            printf("BST before exchange: ");
-            print_arr(pre_arr, bst->size);
-            free(pre_arr);
-        }
-        return -1;
-    }
-    if (bst_delete(bst, res.removed[1]) == -1) {
-        fprintf(stderr, "failed to delete %.2f from the BST\n", res.removed[0]);
-        fprintf(
-            stderr, 
-            "exchange result: removed: [%.2f, %.2f], added: [%.2f, %.2f]\n", 
-            res.removed[0], 
-            res.removed[1], 
-            res.added[0], 
-            res.added[1]
-        );
-        if (pre_arr != NULL) {
-            printf("BST before exchange: ");
-            print_arr(pre_arr, bst->size);
-            free(pre_arr);
-        }
-        return -1;
-    }
-    if (bst_insert(bst, res.added[0]) == -1) {
-        fprintf(stderr, "failed to delete %.2f from the BST\n", res.removed[0]);
-        fprintf(
-            stderr, 
-            "exchange result: removed: [%.2f, %.2f], added: [%.2f, %.2f]\n", 
-            res.removed[0], 
-            res.removed[1], 
-            res.added[0], 
-            res.added[1]
-        );
-        if (pre_arr != NULL) {
-            printf("BST before exchange: ");
-            print_arr(pre_arr, bst->size);
-            free(pre_arr);
-        }
-        return -1;
-    }
-    if (bst_insert(bst, res.added[1]) == -1) {
-        fprintf(stderr, "failed to delete %.2f from the BST\n", res.removed[0]);
-        fprintf(
-            stderr, 
-            "exchange result: removed: [%.2f, %.2f], added: [%.2f, %.2f]\n", 
-            res.removed[0], 
-            res.removed[1], 
-            res.added[0], 
-            res.added[1]
-        );
-        if (pre_arr != NULL) {
-            printf("BST before exchange: ");
-            print_arr(pre_arr, bst->size);
-            free(pre_arr);
-        }
+        fprintf(stderr, "failed to delete %.2f from the BST at %d iteration\n", res.removed[0], iteration);
+        log_err(res, log_arr, bst->size);
         return -1;
     }
 
+    log_arr = bst_to_arr(bst);
+    if (bst_delete(bst, res.removed[1]) == -1) {
+        fprintf(stderr, "failed to delete %.2f from the BST at %d iteration\n", res.removed[1], iteration);
+        log_err(res, log_arr, bst->size);
+        return -1;
+    }
+
+    log_arr = bst_to_arr(bst);
+    if (bst_insert(bst, res.added[0]) == -1) {
+        fprintf(stderr, "failed to insert %.2f from the BST at %d iteration\n", res.added[0], iteration);
+        log_err(res, log_arr, bst->size);
+        return -1;
+    }
+
+    log_arr = bst_to_arr(bst);
+    if (bst_insert(bst, res.added[1]) == -1) {
+        fprintf(stderr, "failed to insert %.2f from the BST at %d iteration\n", res.added[1], iteration);
+        log_err(res, log_arr, bst->size);
+        return -1;
+    }
+
+    iteration++;
     return 0;
 }
