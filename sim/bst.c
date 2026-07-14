@@ -18,42 +18,27 @@ struct BSTNode *_new_bst_node(float val) {
     return node;
 }
 
-int _bst_insert(struct BSTNode *node, float val) {
+struct BSTNode *_bst_insert(struct BSTNode *node, float val) {
+    if (node == NULL)
+        return _new_bst_node(val);
+
     if (val > node->val) {
-        if (node->left != NULL)
-            return _bst_insert(node->left, val);
-        node->left = _new_bst_node(val);
-        if (node->left == NULL)
-            return -1;
+        node->right = _bst_insert(node->right, val);
     } else {
-        if (node->right != NULL)
-            return _bst_insert(node->right, val);
-        node->right = _new_bst_node(val);
-        if (node->right == NULL)
-            return -1;
+        node->left = _bst_insert(node->left, val);
     }
-    return 0;
+    return node;
 }
 
-int bst_insert(BST *bst, float val) {
-    if (bst->root == NULL) {
-        bst->root = _new_bst_node(val);
-        if (bst->root == NULL)
-            return -1;
-        bst->size++;
-        return 0;
-    }
-    if (_bst_insert(bst->root, val) == -1)
-        return -1;
+void bst_insert(BST *bst, float val) {
+    bst->root = _bst_insert(bst->root, val);
     bst->size++;
-    return 0;
 }
 
 int bst_init_with_arr(BST *bst, float *arr, int arr_size) {
     bst_init(bst);
     for (int i = 0; i < arr_size; i++)
-        if (bst_insert(bst, arr[i]) == -1)
-            return -1;
+        bst_insert(bst, arr[i]);
     return 0;
 }
 

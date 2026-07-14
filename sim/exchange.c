@@ -83,19 +83,8 @@ int exchange(float *arr, BST *bst) {
         return -1;
     }
 
-    log_arr = bst_to_arr(bst);
-    if (bst_insert(bst, res.added[0]) == -1) {
-        fprintf(stderr, "failed to insert %.2f from the BST at %d iteration\n", res.added[0], iteration);
-        log_err(res, log_arr, bst->size);
-        return -1;
-    }
-
-    log_arr = bst_to_arr(bst);
-    if (bst_insert(bst, res.added[1]) == -1) {
-        fprintf(stderr, "failed to insert %.2f from the BST at %d iteration\n", res.added[1], iteration);
-        log_err(res, log_arr, bst->size);
-        return -1;
-    }
+    bst_insert(bst, res.added[0]);
+    bst_insert(bst, res.added[1]);
 
     iteration++;
     return 0;
