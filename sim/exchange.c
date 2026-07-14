@@ -69,19 +69,8 @@ int exchange(float *arr, BST *bst) {
     if (!csv)
         return 0;
 
-    float *log_arr = bst_to_arr(bst);
-    if (bst_delete(bst, res.removed[0]) == -1) {
-        fprintf(stderr, "failed to delete %.2f from the BST at %d iteration\n", res.removed[0], iteration);
-        log_err(res, log_arr, bst->size);
-        return -1;
-    }
-
-    log_arr = bst_to_arr(bst);
-    if (bst_delete(bst, res.removed[1]) == -1) {
-        fprintf(stderr, "failed to delete %.2f from the BST at %d iteration\n", res.removed[1], iteration);
-        log_err(res, log_arr, bst->size);
-        return -1;
-    }
+    bst_delete(bst, res.removed[0]);
+    bst_delete(bst, res.removed[1]);
 
     bst_insert(bst, res.added[0]);
     bst_insert(bst, res.added[1]);

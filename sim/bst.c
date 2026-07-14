@@ -42,44 +42,48 @@ int bst_init_with_arr(BST *bst, float *arr, int arr_size) {
     return 0;
 }
 
-int _bst_delete(struct BSTNode *node, float val) {
-    if (node == NULL)
-        return -1;
-
-    struct BSTNode **node_to_delete;
-    float val_to_delete;
-    if (node->val == val) {
-        if (node->left == NULL && node->right == NULL) {
-            free(node);
-            return 1;
-        }
-
-        node_to_delete = node->right != NULL ? &(node->right) : &(node->left);
-        val_to_delete = (*node_to_delete)->val;
-    } else {
-        node_to_delete = node->val > val ? &(node->right) : &(node->left);
-        val_to_delete = val;
-    }
-
-    int res = _bst_delete(*node_to_delete, val_to_delete);
-    if (res == 1) {
-        *node_to_delete = NULL;
-        return 0;
-    }
-    return res;
+struct BSTNode *getSuccessor(struct BSTNode *node) {
+    struct BSTNode *successor = node->right;
+    while (node != NULL && node->left != NULL)
+        successor = successor->left;
+    return successor;
 }
 
-int bst_delete(BST *bst, float val) {
-    if (bst->root == NULL)
-        return -1;
+struct BSTNode *_bst_delete(struct BSTNode *node, float val) {
+    if (node == NULL)
+        return node;
     
-    int res = _bst_delete(bst->root, val);
-    if (res == -1)
-        return -1;
-    if (res == 1)
-        bst->root = NULL;
+    if (val > node->val) {
+        node->left = _bst_delete(node->left, val);
+        return node;
+    }
+
+    if (val < node->val) {
+        node->right = _bst_delete(node->right, val);
+        return node;
+    }
+
+    if (node->left == NULL) {
+        struct BSTNode *tmp = node->right;
+        free(node);
+        return tmp;
+    }
+    
+    if (node->right == NULL) {
+        struct BSTNode *tmp = node->right;
+        free(node);
+        return tmp;
+    }
+    
+    struct BSTNode *successor = getSuccessor(node);
+    node->val = successor->val;
+    node->right = _bst_delete(node->right, val);
+    return node;
+}
+
+void bst_delete(BST *bst, float val) {
+    bst->root = _bst_delete(bst->root, val);
     bst->size--;
-    return 0;
 }
 
 void _bst_to_arr(Stack *stack, struct BSTNode *node) {
