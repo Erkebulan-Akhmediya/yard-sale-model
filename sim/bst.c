@@ -94,16 +94,14 @@ void _bst_to_arr(Stack *stack, struct BSTNode *node) {
     _bst_to_arr(stack, node->right);
 }
 
-float *bst_to_arr(BST *bst) {
+void *bst_to_arr(BST *bst, float *buff) {
     if (bst->root == NULL)
         return NULL;
 
     Stack stack;
-    if (stack_init(&stack, bst->size) == -1)
-        return NULL;
+    stack_init(&stack, buff);
 
     _bst_to_arr(&stack, bst->root);
-    return stack.arr;
 }
 
 void _bst_free(struct BSTNode *node) {

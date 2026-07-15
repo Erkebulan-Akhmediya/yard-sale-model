@@ -65,6 +65,11 @@ int main(int argc, char *argv[]) {
     if (csv)
         write_to_csv(file, arr, people_num);
 
+    float *sorted_arr = calloc(people_num, sizeof(float));
+    if (sorted_arr == NULL) {
+        fprintf(stderr, "failed to allocate sorted array");
+        return 1;
+    }
     for (int i = 0; i < exchange_num; i++) {
         if (exchange(arr, &bst) == -1) {
             fprintf(stderr, "exchange failed\n");
@@ -73,14 +78,10 @@ int main(int argc, char *argv[]) {
         if (!csv) 
             continue;
 
-        float *sorted_arr = bst_to_arr(&bst);
-        if (sorted_arr == NULL) {
-            fprintf(stderr, "failed to turn the BST into an array\n");
-            return 1;
-        }
+        bst_to_arr(&bst, sorted_arr);
         write_to_csv(file, sorted_arr, people_num);
-        free(sorted_arr);
     }
+    free(sorted_arr);
 
     qsort(arr, people_num, sizeof(int), compare);
 

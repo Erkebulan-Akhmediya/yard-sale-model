@@ -1,13 +1,9 @@
 #include "stack.h"
 #include <stdlib.h>
 
-int stack_init(Stack *stack, int cap) {
-    stack->arr = calloc(cap, sizeof(float));
-    if (stack->arr == NULL)
-        return -1;
-
+void stack_init(Stack *stack, float *buff) {
+    stack->arr = buff;
     stack->len = 0;
-    return 0;
 }
 
 void stack_push(Stack *stack, float val) {

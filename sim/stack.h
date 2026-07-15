@@ -6,7 +6,7 @@ typedef struct {
     int len;
 } Stack;
 
-int stack_init(Stack *stack, int cap);
+void stack_init(Stack *stack, float *buff);
 void stack_push(Stack *stack, float val);
 
 #endif
