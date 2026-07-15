@@ -5,22 +5,10 @@
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-int iteration = 0;
-
 typedef struct {
     float removed[2];
     float added[2];
 } ExchangeResult;
-
-void print_arr(float *arr, int size) {
-    printf("[");
-    for (int i = 2; i < size; i++) {
-        printf("%.2f", arr[i]);
-        if (i < size-1)
-            printf(", ");
-    }
-    printf("]\n");
-}
 
 void random_pair(int *i, int *j, int max) {
     *i = rand() % max;
@@ -31,22 +19,6 @@ void random_pair(int *i, int *j, int max) {
 
 bool coin_flip() {
     return rand() % 2 == 1;
-}
-
-void log_err(ExchangeResult res, float *log_arr, int log_arr_size) {
-    fprintf(
-        stderr, 
-        "values to be removed: [%.2f, %.2f], values to be added: [%.2f, %.2f]\n", 
-        res.removed[0], 
-        res.removed[1], 
-        res.added[0], 
-        res.added[1]
-    );
-    if (log_arr != NULL) {
-        printf("BST before operation: ");
-        print_arr(log_arr, log_arr_size);
-        free(log_arr);
-    }
 }
 
 int exchange(float *arr, BST *bst) {
@@ -75,6 +47,5 @@ int exchange(float *arr, BST *bst) {
     bst_insert(bst, res.added[0]);
     bst_insert(bst, res.added[1]);
 
-    iteration++;
     return 0;
 }
