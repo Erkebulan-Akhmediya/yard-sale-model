@@ -9,7 +9,7 @@ I did this for educational purposes out of pure curiosity.
 
 To compile:
 ```
-gcc -o sim -O2 sim/main.c
+make sim
 ```
 
 #### Simulation Options
@@ -19,7 +19,7 @@ gcc -o sim -O2 sim/main.c
 
 To compile:
 ```
-make
+make viz
 ```
 
 #### Visualization Options

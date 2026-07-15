@@ -70,15 +70,16 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "exchange failed\n");
             return 1;
         }
-        if (csv) {
-            float *sorted_arr = bst_to_arr(&bst);
-            if (sorted_arr == NULL) {
-                fprintf(stderr, "failed to turn the BST into an array\n");
-                return 1;
-            }
-            write_to_csv(file, sorted_arr, people_num);
-            free(sorted_arr);
+        if (!csv) 
+            continue;
+
+        float *sorted_arr = bst_to_arr(&bst);
+        if (sorted_arr == NULL) {
+            fprintf(stderr, "failed to turn the BST into an array\n");
+            return 1;
         }
+        write_to_csv(file, sorted_arr, people_num);
+        free(sorted_arr);
     }
 
     qsort(arr, people_num, sizeof(int), compare);
