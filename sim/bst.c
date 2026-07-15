@@ -70,14 +70,14 @@ struct BSTNode *_bst_delete(struct BSTNode *node, float val) {
     }
     
     if (node->right == NULL) {
-        struct BSTNode *tmp = node->right;
+        struct BSTNode *tmp = node->left;
         free(node);
         return tmp;
     }
     
     struct BSTNode *successor = getSuccessor(node);
     node->val = successor->val;
-    node->right = _bst_delete(node->right, val);
+    node->right = _bst_delete(node->right, successor->val);
     return node;
 }
 
@@ -87,13 +87,11 @@ void bst_delete(BST *bst, float val) {
 }
 
 void _bst_to_arr(Stack *stack, struct BSTNode *node) {
-    if (node->left != NULL)
-        _bst_to_arr(stack, node->left);
-    
+    if (node == NULL)
+        return;
+    _bst_to_arr(stack, node->left);
     stack_push(stack, node->val);
-
-    if (node->right != NULL)
-        _bst_to_arr(stack, node->right);
+    _bst_to_arr(stack, node->right);
 }
 
 float *bst_to_arr(BST *bst) {
@@ -106,22 +104,6 @@ float *bst_to_arr(BST *bst) {
 
     _bst_to_arr(&stack, bst->root);
     return stack.arr;
-}
-
-int bst_print_arr(BST *bst) {
-    float *arr = bst_to_arr(bst);
-    if (arr == NULL)
-        return -1;
-
-    printf("BST: [");
-    for (int i = 0; i < bst->size; i++) {
-        printf("%.2f", arr[i]);
-        if (i < bst->size-1)
-            printf(", ");
-    }
-    printf("]\n");
-    free(arr);
-    return 0;
 }
 
 void _bst_free(struct BSTNode *node) {

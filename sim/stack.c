@@ -1,7 +1,7 @@
 #include "stack.h"
 #include <stdlib.h>
 
-int stack_init(Stack *stack, float cap) {
+int stack_init(Stack *stack, int cap) {
     stack->arr = calloc(cap, sizeof(float));
     if (stack->arr == NULL)
         return -1;

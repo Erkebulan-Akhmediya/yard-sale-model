@@ -18,6 +18,5 @@ void bst_insert(BST *, float);
 void bst_delete(BST *, float);
 void bst_free(BST *);
 float *bst_to_arr(BST *);
-int bst_print_arr(BST *);
 
 #endif

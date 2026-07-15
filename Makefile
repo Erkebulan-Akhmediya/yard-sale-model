@@ -1,5 +1,6 @@
 # Choose which module to build: make MODULE=viz  or  make MODULE=sim
 MODULE ?= viz
+ASAN   ?= 0
 
 CC = gcc
 ifeq ($(MODULE),viz)
@@ -10,6 +11,11 @@ CFLAGS = -O2
 LDFLAGS =
 endif
 CFLAGS += -Wall -Wextra
+
+ifeq ($(ASAN),1)
+CFLAGS  += -fsanitize=address -g -O0 -fno-omit-frame-pointer
+LDFLAGS += -fsanitize=address
+endif
 
 SRCS = $(filter-out $(MODULE)/bst_test.c,$(wildcard $(MODULE)/*.c))
 OBJS = $(SRCS:.c=.o)
