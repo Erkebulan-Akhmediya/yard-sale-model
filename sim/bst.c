@@ -54,7 +54,8 @@ int bst_insert(BST *bst, float val) {
 int bst_init_with_arr(BST *bst, float *arr, int arr_size) {
     bst_init(bst);
     for (int i = 0; i < arr_size; i++)
-        bst_insert(bst, arr[i]);
+        if (bst_insert(bst, arr[i]) == -1)
+            return -1;
     return 0;
 }
 

@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 
     float *arr = calloc(people_num, sizeof(float));
     if (arr == NULL) {
-        perror("failed to allocate arr\n");
+        perror("failed to allocate arr");
         return 1;
     }
     for (int i = 0; i < people_num; i++)
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
     
     BST bst;
     if (bst_init_with_arr(&bst, arr, people_num) == -1) {
-        fprintf(stderr, "failed to init the BST\n");
+        perror("failed to init the BST");
         return 1;
     }
     if (bst.size != people_num) {
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
 
     float *sorted_arr = calloc(people_num, sizeof(float));
     if (sorted_arr == NULL) {
-        fprintf(stderr, "failed to allocate sorted array");
+        perror("failed to allocate sorted array");
         return 1;
     }
     for (int i = 0; i < exchange_num; i++) {
