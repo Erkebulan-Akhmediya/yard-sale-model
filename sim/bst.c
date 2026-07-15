@@ -23,9 +23,9 @@ struct BSTNode *_bst_insert(struct BSTNode *node, float val) {
         return _new_bst_node(val);
 
     if (val > node->val) {
-        node->right = _bst_insert(node->right, val);
-    } else {
         node->left = _bst_insert(node->left, val);
+    } else {
+        node->right = _bst_insert(node->right, val);
     }
     return node;
 }
@@ -44,7 +44,7 @@ int bst_init_with_arr(BST *bst, float *arr, int arr_size) {
 
 struct BSTNode *getSuccessor(struct BSTNode *node) {
     struct BSTNode *successor = node->right;
-    while (node != NULL && node->left != NULL)
+    while (successor != NULL && successor->left != NULL)
         successor = successor->left;
     return successor;
 }

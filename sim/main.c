@@ -88,6 +88,8 @@ int main(int argc, char *argv[]) {
 
     free(arr);
 
+    bst_free(&bst);
+
     if (csv && fclose(file) != 0) 
         fprintf(stderr, "failed to close the file: %d\n", errno);
 
