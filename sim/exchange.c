@@ -44,8 +44,10 @@ int exchange(float *arr, BST *bst) {
     bst_delete(bst, res.removed[0]);
     bst_delete(bst, res.removed[1]);
 
-    bst_insert(bst, res.added[0]);
-    bst_insert(bst, res.added[1]);
+    if (bst_insert(bst, res.added[0]) == -1)
+        return -1;
+    if (bst_insert(bst, res.added[1]) == -1)
+        return -1;
 
     return 0;
 }

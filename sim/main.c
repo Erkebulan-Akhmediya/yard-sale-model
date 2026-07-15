@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
     }
     for (int i = 0; i < exchange_num; i++) {
         if (exchange(arr, &bst) == -1) {
-            fprintf(stderr, "exchange failed\n");
+            perror("exchange failed");
             return 1;
         }
         if (!csv) 

@@ -24,15 +24,31 @@ struct BSTNode *_bst_insert(struct BSTNode *node, float val) {
 
     if (val > node->val) {
         node->left = _bst_insert(node->left, val);
+        if (node->left == NULL) {
+            free(node->right);
+            free(node);
+            return NULL;
+        }
     } else {
         node->right = _bst_insert(node->right, val);
+        if (node->right == NULL) {
+            free(node->left);
+            free(node);
+            return NULL;
+        }
     }
     return node;
 }
 
-void bst_insert(BST *bst, float val) {
+int bst_insert(BST *bst, float val) {
     bst->root = _bst_insert(bst->root, val);
+    if (bst->root == NULL) {
+        free(bst->root);
+        bst->size = 0;
+        return -1;
+    }
     bst->size++;
+    return 0;
 }
 
 int bst_init_with_arr(BST *bst, float *arr, int arr_size) {
@@ -94,9 +110,9 @@ void _bst_to_arr(Stack *stack, struct BSTNode *node) {
     _bst_to_arr(stack, node->right);
 }
 
-void *bst_to_arr(BST *bst, float *buff) {
+void bst_to_arr(BST *bst, float *buff) {
     if (bst->root == NULL)
-        return NULL;
+        return;
 
     Stack stack;
     stack_init(&stack, buff);
